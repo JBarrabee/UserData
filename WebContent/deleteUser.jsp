@@ -14,12 +14,38 @@ Please enter the user name of the user you want to delete
 <div class="btn-group" role="group" aria-label="Basic example">
 		<form name="form1" action="deleteUser.jsp" method="get">
 	UserName: <input name="username" type="text"><br>
-	<button type="submit">Submit!</button>
+	<button type="submit">Submit!</button><br><br>
 </form>
 </div>
 <%  
-String username = request.getParameter("username");
+String deleteUsername = request.getParameter("username");
+	
+//String query = "DELETE FROM users WHERE username = deleteUsername";
 
+String query = "Select username From users ";
+Class.forName("com.mysql.jdbc.Driver");
+boolean found = false;
+if (deleteUsername !=null){
+try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/webproducts?useSSL=true", "java3", "java123")){ 
+	Statement statement = con.createStatement();
+	ResultSet rs = statement.executeQuery(query);
+	while(rs.next()) {
+		String  title = rs.getString("username");
+		if (title.equalsIgnoreCase(deleteUsername)){
+			found = true;
+			break;
+			}
+		else {found = false;
+		}		
+	}
+} catch (SQLException ex){
+	System.out.println("There was a database error" + ex.getMessage());
+}
+if (found == true) {
+	out.println(deleteUsername + "  was found");}
+else{ out.println(deleteUsername + " was not found in the system.");
+}
+}
 %>
 
 </body>

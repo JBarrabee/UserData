@@ -18,8 +18,8 @@ String fullName = request.getParameter("fullName");
 String addUser = null;
 
 addUser =
-    "insert into users (username, password, email, fullName)"
-            + " values (?, ?, ?, ?)";
+    "insert into users (index, username, password, email, fullName)"
+            + " values (?, ?, ?, ?, ?)";
 
   if (username != ""){
     Class.forName("com.mysql.jdbc.Driver"); 
@@ -32,6 +32,7 @@ try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/w
       // create the mysql insert preparedstatement
       //con.setAutoCommit(false);
       PreparedStatement preparedStmt = con.prepareStatement(addUser);
+      preparedStmt.setString (1, "index");
       preparedStmt.setString (2, "username");
       preparedStmt.setString   (3, "password");
       preparedStmt.setString(4, email);
@@ -47,6 +48,7 @@ try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/w
       System.err.println("Got an exception!");
       System.err.println(e.getMessage());
     }
+  }
 %>
 
 </body>
